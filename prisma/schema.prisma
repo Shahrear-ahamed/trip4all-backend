@@ -17,7 +17,7 @@ model User {
   password  String
   role      UserRole @default(USER)
   profileId String   @unique @map("profile_id")
-  profile   Profile  @relation(fields: [profileId], references: [id])
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
@@ -48,17 +48,6 @@ model Profile {
   @@map("profiles")
 }
 
-model Token {
-  id        String   @id @default(uuid())
-  userId    String   @unique @map("user_id")
-  token     String
-  expiredAt DateTime @map("expired_at")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt() @map("updated_at")
-
-  @@map("tokens")
-}
-
 // Service model for managing various services
 model Service {
   id          String    @id @default(uuid())
@@ -74,7 +63,7 @@ model Service {
 
 model Cart {
   id        String     @id @default(uuid())
-  profile   Profile    @relation(fields: [profileId], references: [id])
+  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String     @unique
   cartItems CartItem[]
   createdAt DateTime   @default(now()) @map("created_at")
@@ -161,21 +150,21 @@ model Faq {
 
 // gender
 enum Gender {
-  MALE
-  FEMALE
-  OTHERS
+  MALE   @map("male")
+  FEMALE @map("female")
+  OTHERS @map("others")
 }
 
 // User roles
 enum UserRole {
-  USER
-  ADMIN
-  SUPER_ADMIN
+  USER        @map("user")
+  ADMIN       @map("admin")
+  SUPER_ADMIN @map("super_admin")
 }
 
 // Booking status
 enum Status {
-  PENDING
-  CONFIRMED
-  CANCELLED
+  PENDING   @map("pending")
+  CONFIRMED @map("confirmed")
+  CANCELLED @map("cancelled")
 }
