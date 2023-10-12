@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for registration and login
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      UserRole @default(USER)
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("users")
+}
+
+// User profile model for additional user details
+model Profile {
+  id         String    @id @default(uuid())
+  email      String    @unique
+  firstName  String?
+  lastName   String?
+  bio        String?
+  avatar     String?
+  contactNo  String?
+  gender     String?
+  bloodGroup String?
+  user       User?
+  cart       Cart?
+  reviews    Review[]
+  bookings   Booking[]
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt() @map("updated_at")
+
+  @@map("profiles")
+}
+
+// Service model for managing various services
+model Service {
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  bookings    Booking[]
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt() @map("updated_at")
+
+  @@map("services")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  profile   Profile    @relation(fields: [profileId], references: [id])
+  profileId String     @unique @map("profile_id")
+  cartItems CartItem[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt() @map("updated_at")
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("cart_itmes")
+}
+
+// Booking model for handling user bookings
+model Booking {
+  id        String   @id @default(uuid())
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+  serviceId String
+  date      DateTime
+  status    Status   @default(PENDING)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("bookings")
+}
+
+// Review model for user reviews and ratings
+model Review {
+  id        String   @id @default(uuid())
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  serviceId Int
+  rating    Int // Rating can be on a scale of 1 to 5
+  comment   String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("reviews")
+}
+
+// User roles
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
