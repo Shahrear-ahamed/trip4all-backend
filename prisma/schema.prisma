@@ -33,7 +33,7 @@ model Profile {
   bio        String?
   avatar     String?
   contactNo  String?
-  gender     String?
+  gender     Gender?
   bloodGroup String?
   isVerified Boolean    @default(false) @map("is_verified")
   user       User?
@@ -159,6 +159,13 @@ model Faq {
   @@map("faqs")
 }
 
+// gender
+enum Gender {
+  MALE
+  FEMALE
+  OTHERS
+}
+
 // User roles
 enum UserRole {
   USER
@@ -166,6 +173,7 @@ enum UserRole {
   SUPER_ADMIN
 }
 
+// Booking status
 enum Status {
   PENDING
   CONFIRMED
