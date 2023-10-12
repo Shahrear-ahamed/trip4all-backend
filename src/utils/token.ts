@@ -3,6 +3,7 @@ import config from '../config'
 
 type IToken = {
   id: string
+  email: string
   role: string
 }
 

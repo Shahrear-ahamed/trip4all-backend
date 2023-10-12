@@ -1,13 +1,12 @@
-import { Request, Response, Router } from 'express'
+import { Router } from 'express'
+import { AuthRoutes } from '../modules/auth/auth.routes'
 
 const router = Router()
 
 const moduleRoutes = [
   {
-    path: '/test',
-    route: (req: Request, res: Response) => {
-      res.send('Hello World')
-    },
+    path: '/auth',
+    route: AuthRoutes,
   },
 ]
 
