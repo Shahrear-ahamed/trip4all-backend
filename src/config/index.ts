@@ -12,5 +12,6 @@ export default {
     expires_in: process.env.JWT_ACCESS_EXPIRES_IN,
     refresh_token_secret: process.env.JWT_REFRESH_SECRET,
     refresh_token_expires_in: process.env.JWT_REFRESH_EXPIRES_IN,
+    reset_password_expires_in: process.env.JWT_RESET_TOKEN_EXPIRES_IN,
   },
 }

@@ -23,8 +23,15 @@ const verifyToken = (token: string, secret: Secret): JwtPayload => {
   return jwt.verify(token, secret) as JwtPayload
 }
 
+const generateResetLink = (payload: IToken) => {
+  return jwt.sign(payload, config.jwt.secret as string, {
+    expiresIn: config.jwt.reset_password_expires_in,
+  })
+}
+
 export const TokenServices = {
   verifyToken,
   generateToken,
   generateRefreshToken,
+  generateResetLink,
 }

@@ -2,6 +2,8 @@ import express from 'express'
 import { AuthController } from './auth.controller'
 import validateRequest from '../../middlewares/validateRequest'
 import { AuthValidation } from './auth.validation'
+import auth from '../../middlewares/auth'
+import { ENUM_USER_ROLE } from '../../../enum/userRole'
 
 // Define your routes here
 const router = express.Router()
@@ -9,13 +11,34 @@ const router = express.Router()
 // api end points for auth
 
 // sign-up
-router.post('/sign-up', AuthController.signUp)
+router.post(
+  '/sign-up',
+  validateRequest(AuthValidation.signUpZodSchema),
+  AuthController.signUp,
+)
 
 // sign-in
 router.post(
   '/sign-in',
-  validateRequest(AuthValidation.signInValidation),
+  validateRequest(AuthValidation.signInZodSchema),
   AuthController.signIn,
+)
+
+// refresh token
+router.post(
+  '/refresh-token',
+  validateRequest(AuthValidation.refreshTokenZodSchema),
+  AuthController.getAccessToken,
+)
+
+// verify email
+
+// change password
+router.post(
+  '/change-password',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  validateRequest(AuthValidation.changePasswordZodSchema),
+  AuthController.changePassword,
 )
 
 export const AuthRoutes = router

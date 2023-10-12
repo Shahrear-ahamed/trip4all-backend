@@ -4,7 +4,8 @@ import ApiError from '../../../errors/ApiError'
 import httpStatus from 'http-status'
 import { BcryptPassword } from '../../../utils/bcryptPass'
 import { TokenServices } from '../../../utils/token'
-import { IReturnToken } from './auth.interfaces'
+import { IChangePassword, IReturnToken } from './auth.interfaces'
+import config from '../../../config'
 
 // Your service code here
 const signUp = async (payload: User): Promise<IReturnToken> => {
@@ -116,4 +117,90 @@ const signIn = async (payload: Partial<User>): Promise<IReturnToken> => {
   }
 }
 
-export const AuthService = { signUp, signIn }
+// get access token from refresh token
+const getAccessToken = async (
+  token: string,
+): Promise<Partial<IReturnToken>> => {
+  // verify refresh token
+  const result = await TokenServices.verifyToken(
+    token,
+    config.jwt.refresh_token_secret as string,
+  )
+
+  // if result is null, throw error
+  if (!result) throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+
+  // find user by profileId for check user exist or not
+  const user = await prisma.profile.findUnique({
+    where: {
+      id: result.id,
+    },
+  })
+
+  // if user is null, throw error
+  if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+
+  // create token for user
+  const tokenPayload = {
+    id: result.id,
+    email: result.email,
+    role: result.role,
+  }
+
+  const accessToken = await TokenServices.generateToken(tokenPayload)
+
+  // return access token
+  return { accessToken }
+}
+
+// change password of user, if user is logged in
+const changePassword = async (
+  profileId: string,
+  payload: IChangePassword,
+): Promise<void> => {
+  const { oldPassword, newPassword } = payload
+
+  // find user by profileId for user existence
+  const user = await prisma.user.findUnique({
+    where: {
+      profileId,
+    },
+  })
+
+  // if user is null, throw error
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
+
+  // check old password is correct or not
+  const isMatch = await BcryptPassword.comparePassword(
+    oldPassword,
+    user.password,
+  )
+
+  // if password is not match, throw error
+  if (!isMatch)
+    throw new ApiError(httpStatus.NOT_FOUND, 'Your old password is incorrect')
+
+  // hash new password
+  const hashPass = await BcryptPassword.hashedPassword(newPassword)
+
+  // update password
+  const result = await prisma.user.update({
+    where: {
+      profileId,
+    },
+    data: {
+      password: hashPass,
+    },
+  })
+
+  // is anything wrong, throw error
+  if (!result)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Something went wrong')
+}
+
+export const AuthService = {
+  signUp,
+  signIn,
+  getAccessToken,
+  changePassword,
+}

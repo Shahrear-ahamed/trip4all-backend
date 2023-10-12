@@ -48,6 +48,17 @@ model Profile {
   @@map("profiles")
 }
 
+model Token {
+  id        String   @id @default(uuid())
+  userId    String   @unique @map("user_id")
+  token     String
+  expiredAt DateTime @map("expired_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("tokens")
+}
+
 // Service model for managing various services
 model Service {
   id          String    @id @default(uuid())

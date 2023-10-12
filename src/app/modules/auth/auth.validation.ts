@@ -3,7 +3,7 @@ import z from 'zod'
 import { userRoles } from './auth.constants'
 
 // sign up validation
-const signUpValidation = z.object({
+const signUpZodSchema = z.object({
   body: z.object({
     email: z.string({ required_error: 'email must be required' }).email(),
     role: z.enum([...userRoles] as [string, ...string[]], {
@@ -17,7 +17,7 @@ const signUpValidation = z.object({
 })
 
 // sign ip validation
-const signInValidation = z.object({
+const signInZodSchema = z.object({
   body: z.object({
     email: z.string({ required_error: 'email must be required' }).email(),
     password: z
@@ -27,7 +27,29 @@ const signInValidation = z.object({
   }),
 })
 
+// refresh token validation
+const refreshTokenZodSchema = z.object({
+  cookies: z.object({
+    refreshToken: z.string({
+      required_error: 'Refresh Token is required',
+    }),
+  }),
+})
+
+const changePasswordZodSchema = z.object({
+  body: z.object({
+    oldPassword: z.string({
+      required_error: 'Old password  is required',
+    }),
+    newPassword: z.string({
+      required_error: 'New password  is required',
+    }),
+  }),
+})
+
 export const AuthValidation = {
-  signUpValidation,
-  signInValidation,
+  signUpZodSchema,
+  signInZodSchema,
+  refreshTokenZodSchema,
+  changePasswordZodSchema,
 }

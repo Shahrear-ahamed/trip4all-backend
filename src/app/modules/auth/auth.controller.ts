@@ -19,7 +19,8 @@ const signUp = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
-    message: 'Register successfully',
+    message:
+      'Register successfully, we send you an email to verify your account',
     data: result,
   })
 })
@@ -41,7 +42,41 @@ const signIn = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+// refresh token and send access token controller
+const getAccessToken = catchAsync(async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken
+  const result = await AuthService.getAccessToken(refreshToken)
+
+  // set refresh token to cookie
+  Cookie.setCookie(res, refreshToken, 7)
+
+  // send response
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Login successfully',
+    data: result,
+  })
+})
+
+// change password controller
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const body = req.body
+  const profileId = req.user?.id as string
+  const result = await AuthService.changePassword(profileId, body)
+
+  // send response
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Password changed successfully',
+    data: result,
+  })
+})
+
 export const AuthController = {
   signUp,
   signIn,
+  getAccessToken,
+  changePassword,
 }
