@@ -16,8 +16,8 @@ model User {
   email     String   @unique
   password  String
   role      UserRole @default(USER)
+  profileId String   @unique @map("profile_id")
   profile   Profile  @relation(fields: [profileId], references: [id])
-  profileId String   @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
@@ -26,8 +26,8 @@ model User {
 
 // User profile model for additional user details
 model Profile {
-  id         String    @id @default(uuid())
-  email      String    @unique
+  id         String     @id @default(uuid())
+  email      String     @unique
   firstName  String?
   lastName   String?
   bio        String?
@@ -35,12 +35,15 @@ model Profile {
   contactNo  String?
   gender     String?
   bloodGroup String?
+  isVerified Boolean    @default(false) @map("is_verified")
   user       User?
   cart       Cart?
   reviews    Review[]
   bookings   Booking[]
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt() @map("updated_at")
+  feedbacks  Feedback[]
+  blogs      Blog[]
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt() @map("updated_at")
 
   @@map("profiles")
 }
@@ -61,7 +64,7 @@ model Service {
 model Cart {
   id        String     @id @default(uuid())
   profile   Profile    @relation(fields: [profileId], references: [id])
-  profileId String     @unique @map("profile_id")
+  profileId String     @unique
   cartItems CartItem[]
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt() @map("updated_at")
@@ -98,14 +101,51 @@ model Booking {
 model Review {
   id        String   @id @default(uuid())
   profile   Profile  @relation(fields: [profileId], references: [id])
-  profileId String
-  serviceId Int
+  profileId String   @map("profile_id")
+  serviceId Int      @map("service_id")
   rating    Int // Rating can be on a scale of 1 to 5
-  comment   String
+  comment   String   @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("reviews")
+}
+
+// Feedback model for user feedbacks
+model Feedback {
+  id        String   @id @default(uuid())
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String   @map("profile_id")
+  comment   String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("feedbacks")
+}
+
+// Blog model for blog posts only admin
+model Blog {
+  id        String   @id @default(uuid())
+  profileId String   @map("profile_id")
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  title     String   @db.VarChar(255)
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("blogs")
+}
+
+// Faq model for frequently asked questions
+model Faq {
+  id        String   @id @default(uuid())
+  title     String
+  body      String   @db.VarChar(120)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@map("faqs")
 }
 
 // User roles
