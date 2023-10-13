@@ -48,7 +48,7 @@ const getFaqs = async (
   // and conditions for search and filters
   const andConditions = []
 
-  // search needs $or for searching in specified fields
+  // search needs (OR) for searching in specified fields
   if (searchTerm) {
     andConditions.push({
       OR: faqSearchableFields.map(field => ({
