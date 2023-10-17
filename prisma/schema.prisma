@@ -130,6 +130,10 @@ model Blog {
   profile   Profile  @relation(fields: [profileId], references: [id])
   title     String   @db.VarChar(255)
   body      String
+  thumbnail String
+  slug      String   @unique
+  tagId     String   @map("tag_id")
+  tag       Tag      @relation(fields: [tagId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
@@ -146,6 +150,16 @@ model Faq {
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("faqs")
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+  Blog      Blog[]
+
+  @@map("tags")
 }
 
 // gender
