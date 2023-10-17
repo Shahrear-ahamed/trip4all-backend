@@ -8,7 +8,7 @@ import { IChangePassword, IReturnToken } from './auth.interfaces'
 import config from '../../../config'
 
 // Your service code here
-const signUp = async (payload: User): Promise<IReturnToken> => {
+const signUp = async (payload: User) => {
   const { email, role, password } = payload
   const hashPass = await BcryptPassword.hashedPassword(password)
 
@@ -58,21 +58,17 @@ const signUp = async (payload: User): Promise<IReturnToken> => {
       'Unable to create profile',
     )
 
-  // create token for user
-  const tokenPayload = {
-    id: result.profileId,
+  const returnResult = {
+    id: result.id,
     email: result.email,
     role: result.role,
+    profileId: result.profileId,
+    createdAt: result.createdAt,
+    updatedAt: result.updatedAt,
   }
 
-  const accessToken = await TokenServices.generateToken(tokenPayload)
-  const refreshToken = await TokenServices.generateRefreshToken(tokenPayload)
-
-  // return access token and refresh token for direct login after sign up
-  return {
-    accessToken,
-    refreshToken,
-  }
+  // return user
+  return returnResult
 }
 
 // login with email and password
@@ -106,6 +102,7 @@ const signIn = async (payload: Partial<User>): Promise<IReturnToken> => {
     email: result.email,
     role: result.role,
   }
+  console.log(tokenPayload)
 
   const accessToken = await TokenServices.generateToken(tokenPayload)
   const refreshToken = await TokenServices.generateRefreshToken(tokenPayload)

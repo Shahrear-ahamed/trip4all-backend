@@ -24,6 +24,14 @@ router.post(
   AuthController.signIn,
 )
 
+// create user by admin
+router.post(
+  '/create-user',
+  auth(ENUM_USER_ROLE.ADMIN),
+  validateRequest(AuthValidation.signUpZodSchema),
+  AuthController.signUp,
+)
+
 // refresh token
 router.post(
   '/refresh-token',

@@ -1,2 +1,2 @@
 // Define your constants here
-export const userRoles = ['SUPER_ADMIN', 'ADMIN', 'USER']
+export const userRoles = ['super_admin', 'admin', 'user']

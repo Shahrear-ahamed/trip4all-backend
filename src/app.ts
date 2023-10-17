@@ -8,7 +8,7 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app: Application = express()
 
 // Enable CORS
-app.use(cors())
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 
 // Parse JSON bodies
 app.use(express.json())
