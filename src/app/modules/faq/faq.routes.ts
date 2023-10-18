@@ -34,7 +34,7 @@ router.post(
 router.get(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  FaqController.getFaqs,
+  FaqController.getSingleFaq,
 )
 
 // update faq
@@ -42,14 +42,14 @@ router.put(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   validateRequest(FaqValidation.createFaqZodSchema),
-  FaqController.getFaqs,
+  FaqController.updateFaq,
 )
 
 // delete faq
 router.delete(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  FaqController.getFaqs,
+  FaqController.deleteFaq,
 )
 
 export const FaqRoutes = router

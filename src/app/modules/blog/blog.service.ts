@@ -14,12 +14,26 @@ const createBlog = async (profileId: string, payload: Blog): Promise<Blog> => {
     data: {
       profileId,
       title: payload.title,
+      slug: payload.slug,
       body: payload.body,
+      tagId: payload.tagId,
       thumbnail: payload.thumbnail,
     },
   })
 
   // return after creation
+  return result
+}
+
+// get a blog by slug
+const getBlogBySlug = async (slug: string): Promise<Blog | null> => {
+  const result = await prisma.blog.findUnique({
+    where: {
+      slug,
+    },
+  })
+
+  // return after find a blog
   return result
 }
 
@@ -143,6 +157,7 @@ const deleteBlog = async (id: string): Promise<void> => {
 export const BlogService = {
   createBlog,
   getABlog,
+  getBlogBySlug,
   getAllBlogs,
   updateBlog,
   deleteBlog,

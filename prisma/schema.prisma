@@ -28,8 +28,7 @@ model User {
 model Profile {
   id         String     @id @default(uuid())
   email      String     @unique
-  firstName  String?
-  lastName   String?
+  fullName   String?
   bio        String?
   avatar     String?
   contactNo  String?
@@ -90,7 +89,7 @@ model Booking {
   service   Service  @relation(fields: [serviceId], references: [id])
   serviceId String
   date      DateTime
-  status    Status   @default(PENDING)
+  status    Status   @default(pending)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
@@ -164,9 +163,9 @@ model Tag {
 
 // gender
 enum Gender {
-  MALE   @map("male")
-  FEMALE @map("female")
-  OTHERS @map("others")
+  male
+  female
+  others
 }
 
 // User roles
@@ -178,7 +177,7 @@ enum UserRole {
 
 // Booking status
 enum Status {
-  PENDING   @map("pending")
-  CONFIRMED @map("confirmed")
-  CANCELLED @map("cancelled")
+  pending
+  confirmed
+  cancelled
 }

@@ -12,6 +12,10 @@ const createBlog = catchAsync(async (req, res) => {
   //get user id and blog payload
   const profileId = req?.user?.id
   const body = req.body
+  console.log({
+    profileId,
+    body,
+  })
 
   // create blog
   const result = await BlogService.createBlog(profileId, body)
@@ -41,6 +45,23 @@ const getAllBlogs = catchAsync(async (req, res) => {
     message: 'All blogs retrieved successfully',
     meta: result.meta,
     data: result.data,
+  })
+})
+
+// get a blog by slug
+const getBlogBySlug = catchAsync(async (req, res) => {
+  // get blog slug
+  const slugId = req.params.slug
+
+  // get blog
+  const result = await BlogService.getABlog(slugId)
+
+  // send response after create blog post
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Single blog by slug retrieved successfully',
+    data: result,
   })
 })
 
@@ -99,6 +120,7 @@ const deleteBlog = catchAsync(async (req, res) => {
 export const BlogController = {
   createBlog,
   getABlog,
+  getBlogBySlug,
   getAllBlogs,
   updateBlog,
   deleteBlog,

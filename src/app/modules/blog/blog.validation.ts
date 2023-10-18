@@ -7,6 +7,7 @@ const createBlogZodSchema = z.object({
   body: z.object({
     title: z.string().max(255),
     body: z.string(),
+    tagId: z.string().optional(),
     thumbnail: z.string().url().optional(),
   }),
 })
@@ -16,6 +17,7 @@ const updateBlogZodSchema = z.object({
   body: z.object({
     title: z.string().max(255).optional(),
     body: z.string().optional(),
+    tagIds: z.string().optional(),
     thumbnail: z.string().url().optional(),
   }),
 })

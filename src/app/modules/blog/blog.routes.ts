@@ -19,7 +19,10 @@ router.post(
 // get all blogs router
 router.get('/', BlogController.getAllBlogs)
 
-// get a blog router
+//for read blog by slug
+router.get('/:slug', BlogController.getBlogBySlug)
+
+// get a blog router update this blog
 router.get('/:id', BlogController.getABlog)
 
 // update a blog router
