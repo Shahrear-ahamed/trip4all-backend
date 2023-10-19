@@ -3,7 +3,7 @@
 import { Blog, Prisma } from '@prisma/client'
 import prisma from '../../../shared/prisma'
 import { IPaginationOptions } from '../../../interfaces/pagination'
-import { IBlogFilterableFields } from './blog.interfaces'
+import { IBlogFilterableFields, ISlugBlog } from './blog.interfaces'
 import { blogSearchableFields } from './blog.constants'
 import { paginationHelpers } from '../../../utils/paginationHelper'
 import { IGenericResponse } from '../../../interfaces/common'
@@ -26,15 +26,44 @@ const createBlog = async (profileId: string, payload: Blog): Promise<Blog> => {
 }
 
 // get a blog by slug
-const getBlogBySlug = async (slug: string): Promise<Blog | null> => {
+const getBlogBySlug = async (slug: string): Promise<ISlugBlog | null> => {
   const result = await prisma.blog.findUnique({
     where: {
       slug,
     },
   })
 
+  // find next blog and previous blog
+  const nextBlog = await prisma.blog.findFirst({
+    where: {
+      createdAt: {
+        gt: result?.createdAt,
+      },
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
+  })
+
+  const previousBlog = await prisma.blog.findFirst({
+    where: {
+      createdAt: {
+        lt: result?.createdAt,
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  const blogReturn = {
+    ...result,
+    nextBlog: nextBlog?.slug,
+    previousBlog: previousBlog?.slug,
+  } as ISlugBlog
+
   // return after find a blog
-  return result
+  return blogReturn
 }
 
 // get a blog
@@ -145,9 +174,9 @@ const updateBlog = async (
 }
 
 // delete a blog
-const deleteBlog = async (id: string): Promise<void> => {
-  // fully delete a blog no return
-  await prisma.blog.delete({
+const deleteBlog = async (id: string): Promise<Blog | null> => {
+  // fully delete a blog
+  return await prisma.blog.delete({
     where: {
       id,
     },

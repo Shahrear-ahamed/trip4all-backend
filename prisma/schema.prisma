@@ -47,38 +47,33 @@ model Profile {
   @@map("profiles")
 }
 
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt() @map("updated_at")
+  services  Service[]
+
+  @@map("categories")
+}
+
 // Service model for managing various services
 model Service {
-  id          String    @id @default(uuid())
-  name        String
-  description String
-  price       Float
-  bookings    Booking[]
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt() @map("updated_at")
+  id            String        @id @default(uuid())
+  title         String
+  description   String
+  price         Float
+  availableDate String        @map("available_date")
+  slots         Int
+  thumbnail     String
+  category      Category?     @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  status        ServiceStatus @default(upcoming)
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt() @map("updated_at")
+  bookings      Booking[]
 
   @@map("services")
-}
-
-model Cart {
-  id        String     @id @default(uuid())
-  profile   Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId String     @unique
-  cartItems CartItem[]
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt() @map("updated_at")
-
-  @@map("carts")
-}
-
-model CartItem {
-  id        String   @id @default(uuid())
-  cart      Cart     @relation(fields: [cartId], references: [id])
-  cartId    String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt() @map("updated_at")
-
-  @@map("cart_itmes")
 }
 
 // Booking model for handling user bookings
@@ -87,13 +82,26 @@ model Booking {
   profile   Profile  @relation(fields: [profileId], references: [id])
   profileId String
   service   Service  @relation(fields: [serviceId], references: [id])
-  serviceId String
+  serviceId String   @map("service_id")
   date      DateTime
   status    Status   @default(pending)
+  cartId    String   @map("cart_id")
+  cart      Cart     @relation(fields: [cartId], references: [id])
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt() @map("updated_at")
 
   @@map("bookings")
+}
+
+model Cart {
+  id        String    @id @default(uuid())
+  profile   Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt() @map("updated_at")
+  Booking   Booking[]
+
+  @@map("carts")
 }
 
 // Review model for user reviews and ratings
@@ -180,4 +188,11 @@ enum Status {
   pending
   confirmed
   cancelled
+  completed
+}
+
+// Service status
+enum ServiceStatus {
+  upcoming
+  ongoing
 }

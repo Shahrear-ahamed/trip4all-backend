@@ -54,7 +54,7 @@ const getBlogBySlug = catchAsync(async (req, res) => {
   const slugId = req.params.slug
 
   // get blog
-  const result = await BlogService.getABlog(slugId)
+  const result = await BlogService.getBlogBySlug(slugId)
 
   // send response after create blog post
   sendResponse(res, {

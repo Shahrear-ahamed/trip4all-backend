@@ -10,6 +10,7 @@ import { Cookie } from '../../../shared/setCookie'
 // sign up user controller
 const signUp = catchAsync(async (req: Request, res: Response) => {
   const body = req.body
+  console.log(body)
   const result = await AuthService.signUp(body)
 
   // send response

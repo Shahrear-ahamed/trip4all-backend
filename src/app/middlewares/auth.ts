@@ -11,24 +11,26 @@ const auth =
     try {
       //get authorization token
       const token = req.headers.authorization
-
       if (!token) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized')
       }
       // verify token
       let verifiedUser = null
 
-      verifiedUser = await TokenServices.verifyToken(
-        token,
-        config.jwt.secret as Secret,
-      )
-
-      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden')
+      try {
+        verifiedUser = TokenServices.verifyToken(
+          token,
+          config.jwt.secret as Secret,
+        )
+      } catch (error) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'You are not authorized')
       }
 
       req.user = verifiedUser
 
+      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden')
+      }
       next()
     } catch (error) {
       next(error)

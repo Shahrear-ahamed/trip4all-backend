@@ -89,7 +89,6 @@ const updateFaq = catchAsync(async (req, res) => {
 
 // delete faq
 const deleteFaq = catchAsync(async (req, res) => {
-  console.log(req.params.id)
   const id = req.params.id
   const result = await FaqService.deleteFaq(id)
 
