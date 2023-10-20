@@ -104,6 +104,41 @@ const getAllBookingsByStatus = async (
   }
 }
 
+// get all bookings
+const getAllBookings = async (
+  paginationOptions: IPaginationOptions,
+): Promise<IGenericResponse<Booking[]>> => {
+  // extract pagination options
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions)
+
+  const result = await prisma.booking.findMany({
+    skip,
+    take: limit,
+    orderBy:
+      sortBy && sortOrder
+        ? { [sortBy]: sortOrder }
+        : {
+            createdAt: 'desc',
+          },
+  })
+
+  // get total count of faqs by pagination options
+  const total = await prisma.booking.count()
+
+  const totalPage = Math.ceil(total / limit)
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+      totalPage,
+    },
+    data: result,
+  }
+}
+
 // get single booking by id
 const getBookingById = async (bookingId: string): Promise<Booking | null> => {
   const booking = await prisma.booking.findUnique({
@@ -125,10 +160,22 @@ const deleteBooking = async (bookingId: string): Promise<Booking> => {
   return booking
 }
 
+const myBookings = async (profileId: string): Promise<Booking[]> => {
+  const result = await prisma.booking.findMany({
+    where: {
+      profileId,
+    },
+  })
+
+  return result
+}
+
 export const BookingService = {
   createBooking,
   getAllBookingsByStatus,
+  getAllBookings,
   updateBooking,
   deleteBooking,
   getBookingById,
+  myBookings,
 }

@@ -22,8 +22,8 @@ const createService = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getServiceById = catchAsync(async (req: Request, res: Response) => {
-  const body = req.body
-  const result = await ServiceService.getServiceById(body)
+  const id = req.params.id
+  const result = await ServiceService.getServiceById(id)
 
   // send response
   sendResponse(res, {

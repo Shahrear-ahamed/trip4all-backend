@@ -63,15 +63,15 @@ model Service {
   title         String
   description   String
   price         Float
-  availableDate String        @map("available_date")
+  availableDate DateTime      @map("available_date")
   slots         Int
   thumbnail     String
   category      Category?     @relation(fields: [categoryId], references: [id])
   categoryId    String?
-  status        ServiceStatus @default(upcoming)
+  status        ServiceStatus @default(ongoing)
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt() @map("updated_at")
-  bookings      Booking[]
+  booking       Booking?
 
   @@map("services")
 }
@@ -82,7 +82,7 @@ model Booking {
   profile   Profile  @relation(fields: [profileId], references: [id])
   profileId String
   service   Service  @relation(fields: [serviceId], references: [id])
-  serviceId String   @map("service_id")
+  serviceId String   @unique @map("service_id")
   date      DateTime
   status    Status   @default(pending)
   cartId    String   @map("cart_id")

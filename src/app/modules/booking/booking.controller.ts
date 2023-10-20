@@ -23,6 +23,20 @@ const createBooking = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+// get all bookings
+const getAllBookings = catchAsync(async (req: Request, res: Response) => {
+  const paginationOptions = pick(req.query, paginationFields)
+  const result = await BookingService.getAllBookings(paginationOptions)
+
+  // send response
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Retrieved all bookings successfully',
+    data: result,
+  })
+})
+
 const getBookingById = catchAsync(async (req: Request, res: Response) => {
   const body = req.body
   const result = await BookingService.getBookingById(body)
@@ -83,10 +97,26 @@ const getAllBookingsByStatus = catchAsync(
   },
 )
 
+// my bookings
+const myBookings = catchAsync(async (req: Request, res: Response) => {
+  const profileId = req?.user?.id
+  const result = await BookingService.myBookings(profileId)
+
+  // send response
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: 'Retrieved my bookings successfully',
+    data: result,
+  })
+})
+
 export const BookingController = {
   createBooking,
   updateBooking,
   getAllBookingsByStatus,
+  getAllBookings,
   getBookingById,
   deleteBooking,
+  myBookings,
 }
