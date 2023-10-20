@@ -96,10 +96,22 @@ const deleteReview = async (id: string): Promise<void> => {
   })
 }
 
+// my reviews
+const getMyReviews = async (id: string): Promise<Review[]> => {
+  const result = await prisma.review.findMany({
+    where: {
+      profileId: id,
+    },
+  })
+
+  return result
+}
+
 export const ReviewService = {
   createReview,
   getAllReviews,
   getAReview,
   updateReview,
   deleteReview,
+  getMyReviews,
 }

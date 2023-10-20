@@ -1,2 +1,2 @@
-"use strict";
+'use strict'
 // Define your constants here

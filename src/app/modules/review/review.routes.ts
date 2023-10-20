@@ -45,4 +45,11 @@ router.delete(
   ReviewController.deleteReview,
 )
 
+// my reviews
+router.get(
+  '/my-reviews',
+  auth(ENUM_USER_ROLE.USER),
+  ReviewController.getMyReviews,
+)
+
 export const ReviewRoutes = router

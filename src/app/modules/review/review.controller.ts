@@ -82,10 +82,24 @@ const deleteReview = catchAsync(async (req, res) => {
   })
 })
 
+// my reviews
+const getMyReviews = catchAsync(async (req, res) => {
+  const result = await ReviewService.getMyReviews(req?.user?.id)
+
+  // send response after create review
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'My reviews retrieved successfully',
+    data: result,
+  })
+})
+
 export const ReviewController = {
   createReview,
   getAllReviews,
   getAReview,
   updateReview,
   deleteReview,
+  getMyReviews,
 }
