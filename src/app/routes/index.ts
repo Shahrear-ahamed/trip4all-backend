@@ -7,6 +7,7 @@ import { TagRoutes } from '../modules/tag/tag.routes'
 import { ServiceRoutes } from '../modules/service/service.routes'
 import { BookingRoutes } from '../modules/booking/booking.routes'
 import { CategoryRoutes } from '../modules/category/category.routes'
+import { FeedbackRoutes } from '../modules/feedback/feedback.routes'
 
 const router = Router()
 
@@ -42,6 +43,10 @@ const moduleRoutes = [
   {
     path: '/categories',
     route: CategoryRoutes,
+  },
+  {
+    path: '/feedbacks',
+    route: FeedbackRoutes,
   },
 ]
 
