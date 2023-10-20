@@ -9,6 +9,7 @@ const tag_routes_1 = require("../modules/tag/tag.routes");
 const service_routes_1 = require("../modules/service/service.routes");
 const booking_routes_1 = require("../modules/booking/booking.routes");
 const category_routes_1 = require("../modules/category/category.routes");
+const feedback_routes_1 = require("../modules/feedback/feedback.routes");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -42,6 +43,10 @@ const moduleRoutes = [
     {
         path: '/categories',
         route: category_routes_1.CategoryRoutes,
+    },
+    {
+        path: '/feedbacks',
+        route: feedback_routes_1.FeedbackRoutes,
     },
 ];
 moduleRoutes.forEach(route => {
