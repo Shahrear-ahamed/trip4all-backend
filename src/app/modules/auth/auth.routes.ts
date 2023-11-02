@@ -40,6 +40,7 @@ router.post(
 )
 
 // verify email
+// router.get('/verify-email', AuthController.verifyEmail)
 
 // change password
 router.post(
