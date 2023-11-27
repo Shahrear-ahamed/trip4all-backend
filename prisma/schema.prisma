@@ -26,23 +26,24 @@ model User {
 
 // User profile model for additional user details
 model Profile {
-  id         String     @id @default(uuid())
-  email      String     @unique
-  fullName   String?
-  bio        String?
-  avatar     String?
-  contactNo  String?
-  gender     Gender?
-  bloodGroup String?
-  isVerified Boolean    @default(false) @map("is_verified")
-  user       User?
-  cart       Cart?
-  reviews    Review[]
-  bookings   Booking[]
-  feedbacks  Feedback[]
-  blogs      Blog[]
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt() @map("updated_at")
+  id          String     @id @default(uuid())
+  email       String     @unique
+  fullName    String?
+  bio         String?
+  avatar      String?
+  contactNo   String?
+  gender      Gender?
+  bloodGroup  String?
+  designation String?
+  isVerified  Boolean    @default(false) @map("is_verified")
+  user        User?
+  cart        Cart?
+  reviews     Review[]
+  bookings    Booking[]
+  feedbacks   Feedback[]
+  blogs       Blog[]
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt() @map("updated_at")
 
   @@map("profiles")
 }

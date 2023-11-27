@@ -19,7 +19,7 @@ router.get('/', blog_controller_1.BlogController.getAllBlogs);
 //for read blog by slug
 router.get('/:slug', blog_controller_1.BlogController.getBlogBySlug);
 // get a blog router update this blog
-router.get('/:id', blog_controller_1.BlogController.getABlog);
+router.get('/id/:id', blog_controller_1.BlogController.getABlog);
 // update a blog router
 router.patch('/:id', (0, auth_1.default)(userRole_1.ENUM_USER_ROLE.SUPER_ADMIN, userRole_1.ENUM_USER_ROLE.ADMIN), (0, validateRequest_1.default)(blog_validation_1.BlogValidation.updateBlogZodSchema), blog_controller_1.BlogController.updateBlog);
 // delete a blog router

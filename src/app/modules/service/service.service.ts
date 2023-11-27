@@ -86,7 +86,6 @@ const updateService = async (
 }
 
 const deleteService = async (id: string) => {
-  console.log('id', id)
   return await prisma.service.delete({
     where: {
       id,
@@ -101,8 +100,6 @@ const homeService = async () => {
       createdAt: 'desc',
     },
   })
-
-  console.log('categories', categories)
 
   // give me single services of each category
   const result = await Promise.all(

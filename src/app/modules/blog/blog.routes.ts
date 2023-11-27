@@ -23,7 +23,7 @@ router.get('/', BlogController.getAllBlogs)
 router.get('/:slug', BlogController.getBlogBySlug)
 
 // get a blog router update this blog
-router.get('/:id', BlogController.getABlog)
+router.get('/id/:id', BlogController.getABlog)
 
 // update a blog router
 router.patch(

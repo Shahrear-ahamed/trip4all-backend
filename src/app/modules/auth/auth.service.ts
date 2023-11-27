@@ -102,7 +102,6 @@ const signIn = async (payload: Partial<User>): Promise<IReturnToken> => {
     email: result.email,
     role: result.role,
   }
-  console.log(tokenPayload)
 
   const accessToken = await TokenServices.generateToken(tokenPayload)
   const refreshToken = await TokenServices.generateRefreshToken(tokenPayload)

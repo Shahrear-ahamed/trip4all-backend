@@ -89,7 +89,6 @@ const signIn = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         email: result.email,
         role: result.role,
     };
-    console.log(tokenPayload);
     const accessToken = yield token_1.TokenServices.generateToken(tokenPayload);
     const refreshToken = yield token_1.TokenServices.generateRefreshToken(tokenPayload);
     // return access token and refresh token for direct login after sign up

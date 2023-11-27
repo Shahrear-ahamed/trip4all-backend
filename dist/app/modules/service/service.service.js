@@ -79,7 +79,6 @@ const updateService = (id, body) => __awaiter(void 0, void 0, void 0, function* 
     return result;
 });
 const deleteService = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('id', id);
     return yield prisma_1.default.service.delete({
         where: {
             id,
@@ -93,7 +92,6 @@ const homeService = () => __awaiter(void 0, void 0, void 0, function* () {
             createdAt: 'desc',
         },
     });
-    console.log('categories', categories);
     // give me single services of each category
     const result = yield Promise.all(categories.map((category) => __awaiter(void 0, void 0, void 0, function* () {
         const service = yield prisma_1.default.service.findFirst({

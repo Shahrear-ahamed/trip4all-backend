@@ -8,7 +8,13 @@ import globalErrorHandler from './app/middlewares/globalErrorHandler'
 const app: Application = express()
 
 // Enable CORS
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://trip4all.vercel.app'],
+    credentials: true,
+  }),
+)
+// app.use(cors({ origin: 'https://trip4all.vercel.app', credentials: true }))
 
 // Parse JSON bodies
 app.use(express.json())

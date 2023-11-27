@@ -22,6 +22,7 @@ router.post('/create-user', (0, auth_1.default)(userRole_1.ENUM_USER_ROLE.ADMIN)
 // refresh token
 router.post('/refresh-token', (0, validateRequest_1.default)(auth_validation_1.AuthValidation.refreshTokenZodSchema), auth_controller_1.AuthController.getAccessToken);
 // verify email
+// router.get('/verify-email', AuthController.verifyEmail)
 // change password
 router.post('/change-password', (0, auth_1.default)(userRole_1.ENUM_USER_ROLE.SUPER_ADMIN, userRole_1.ENUM_USER_ROLE.ADMIN, userRole_1.ENUM_USER_ROLE.USER), (0, validateRequest_1.default)(auth_validation_1.AuthValidation.changePasswordZodSchema), auth_controller_1.AuthController.changePassword);
 exports.AuthRoutes = router;

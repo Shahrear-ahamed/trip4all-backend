@@ -27,10 +27,6 @@ const createBlog = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     //get user id and blog payload
     const profileId = (_a = req === null || req === void 0 ? void 0 : req.user) === null || _a === void 0 ? void 0 : _a.id;
     const body = req.body;
-    console.log({
-        profileId,
-        body,
-    });
     // create blog
     const result = yield blog_service_1.BlogService.createBlog(profileId, body);
     // send response after create blog post

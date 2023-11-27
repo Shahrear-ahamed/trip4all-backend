@@ -33,7 +33,6 @@ const setCookie_1 = require("../../../shared/setCookie");
 // sign up user controller
 const signUp = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
-    console.log(body);
     const result = yield auth_service_1.AuthService.signUp(body);
     // send response
     (0, sendResponse_1.default)(res, {

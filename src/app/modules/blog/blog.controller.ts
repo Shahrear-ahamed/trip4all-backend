@@ -12,10 +12,6 @@ const createBlog = catchAsync(async (req, res) => {
   //get user id and blog payload
   const profileId = req?.user?.id
   const body = req.body
-  console.log({
-    profileId,
-    body,
-  })
 
   // create blog
   const result = await BlogService.createBlog(profileId, body)
